@@ -1,4 +1,3 @@
-const { log } = require('console');
 const stream = require('stream');
 const LimitExceededError = require('./LimitExceededError');
 
