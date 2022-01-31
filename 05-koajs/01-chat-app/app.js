@@ -14,23 +14,24 @@ router.get('/subscribe', async (ctx, next) => {
         subscribers.push(resolve);
     }).then((message) => {
         ctx.status = 200;
-        ctx.response.body = `"${message}" (${new Date().toLocaleString()})`;
-        return next();
+        ctx.response.body = message;
+        next();
     });
 });
 
 router.post('/publish', async (ctx, next) => {
     const message = ctx.request.body.message;
+    ctx.status = 200;
 
-    if (message) {
-        subscribers.forEach((resolve) => {
-            resolve(message);
-        });
-        ctx.status = 200;
-        ctx.body = 'published';
+    if (! message) {
+        return next();
     }
+    subscribers.forEach((resolve) => {
+        resolve(message);
+    });
     subscribers = [];
-    return next();
+    ctx.response.body = 'published';
+    next();
 });
 
 app.use(router.routes());
