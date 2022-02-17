@@ -39,8 +39,10 @@ module.exports.confirm = async (ctx, next) => {
         }
         user.verificationToken = undefined;
         await user.save();
+
+        const token = await ctx.login(user);
         ctx.status = 200;
-        ctx.body = {token: verificationToken};
+        ctx.body = {token};
     } catch (err) {
         ctx.throw(400, err);
     }
